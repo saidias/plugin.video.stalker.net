@@ -148,11 +148,12 @@ def retrieveData(url, values ):
 
 def getGenres(portal_mac, url, serial, path):	
 	global key, cache_version;
+	global addondir
 	
 	now = time();
 	portalurl = "_".join(re.findall("[a-zA-Z0-9]+", url));
 	#portalurl = path + '/' + portalurl + '-genres';
-	portalurl = 'tv-genres';
+	portalurl = portalurl + '-genres';
 	
 	setMac(portal_mac);
 	setSerialNumber(serial);
@@ -181,7 +182,7 @@ def getGenres(portal_mac, url, serial, path):
 	
 	data = data[:-3] + '\n}}'
 
-	with open(portalurl, 'r') as f: f.write(data.encode('utf-8'));
+	with open(portalurl, 'r+') as f: f.write(data.encode('utf-8'));
 	
 	return json.loads(data.encode('utf-8'));
 	
@@ -189,7 +190,7 @@ def getVoD(portal_mac, url, serial, path):
 	now = time();
 	portalurl = "_".join(re.findall("[a-zA-Z0-9]+", url));
 	#portalurl = path + '/' + portalurl + '-vod';
-	portalurl = 'tv-vod';
+	portalurl = portalurl + '-vod';
 	
 	setMac(portal_mac);
 	setSerialNumber(serial);
@@ -235,7 +236,7 @@ def getVoD(portal_mac, url, serial, path):
 
 	data = data[:-3] + '\n]}'
 
-	with open(portalurl, 'r') as f: f.write(data.encode('utf-8'));
+	with open(portalurl, 'r+') as f: f.write(data.encode('utf-8'));
 	
 	return json.loads(data.encode('utf-8'));
 
@@ -262,7 +263,7 @@ def getAllChannels(portal_mac, url, serial, path):
 	
 	portalurl = "_".join(re.findall("[a-zA-Z0-9]+", url));
 	#portalurl = path + '/' + portalurl
-	portalurl = 'tv-channels'
+	#portalurl = portalurl
 	
 	setMac(portal_mac);
 	setSerialNumber(serial);
@@ -350,7 +351,7 @@ def getAllChannels(portal_mac, url, serial, path):
 		data = data[:-3] + '\n}}';
 
 	
-	with open(portalurl, 'r') as f: f.write(data.encode('utf-8'));
+	with open(portalurl, 'r+') as f: f.write(data.encode('utf-8'));
 	
 	return json.loads(data.encode('utf-8'));
 

@@ -17,6 +17,8 @@ addon       = xbmcaddon.Addon()
 addonname   = addon.getAddonInfo('name')
 addondir    = xbmc.translatePath( addon.getAddonInfo('profile') ) 
 
+tvdata	= xbmc.translatePath('special://home/userdata/addons/plugin.video.stalker.net-master')
+
 
 def portalConfig(number):
 
