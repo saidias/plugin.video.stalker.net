@@ -146,19 +146,31 @@ def retrieveData(url, values ):
 	return info;
 
 
-def getGenres(portal_mac, url, serial, path):	
+def getGenres(portal_mac, url, serial, addon_dir):	
 	global key, cache_version;
-	global addondir
 	
 	now = time();
 	portalurl = "_".join(re.findall("[a-zA-Z0-9]+", url));
-	#portalurl = path + '/' + portalurl + '-genres';
-	portalurl = portalurl + '-genres';
+	portalurl = addon_dir + '/' + portalurl + '-genres';
 	
 	setMac(portal_mac);
 	setSerialNumber(serial);
 	
+	if not os.path.exists(addon_dir): 
+		os.makedirs(addon_dir);
 	
+	if os.path.exists(portalurl):
+		#check last time
+		with open(portalurl) as data_file: data = json.load(data_file);
+		
+		if 'version' not in data or data['version'] != cache_version:
+			clearCache(url, addon_dir);
+			
+		else:
+			time_init = float(data['time']);
+			# update 12h
+			if ((now - time_init) / 3600) < 12:
+				return data;
 	
 	handshake(url);
 	
@@ -186,16 +198,29 @@ def getGenres(portal_mac, url, serial, path):
 	
 	return json.loads(data.encode('utf-8'));
 	
-def getVoD(portal_mac, url, serial, path):	
+def getVoD(portal_mac, url, serial, addon_dir):	
 	now = time();
 	portalurl = "_".join(re.findall("[a-zA-Z0-9]+", url));
-	#portalurl = path + '/' + portalurl + '-vod';
-	portalurl = portalurl + '-vod';
+	portalurl = addon_dir + '/' + portalurl + '-vod';
 	
 	setMac(portal_mac);
 	setSerialNumber(serial);
 	
+	if not os.path.exists(addon_dir):
+		os.makedirs(addon_dir)
 	
+	if os.path.exists(portalurl):
+		#check last time
+		with open(portalurl) as data_file: data = json.load(data_file);
+	
+		if 'version' not in data or data['version'] != cache_version:
+			clearCache(url, addon_dir);
+			
+		else:
+			time_init = float(data['time']);
+			# update 12h
+			if ((now - time_init) / 3600) < 12:
+				return data;
 	
 	handshake(url);
 	
@@ -255,24 +280,37 @@ def orderChannels(channels):
       	return data.values();
 
 
-def getAllChannels(portal_mac, url, serial, path):
+def getAllChannels(portal_mac, url, serial, addon_dir):
 
 	added = False;
 	
 	now = time();
 	
 	portalurl = "_".join(re.findall("[a-zA-Z0-9]+", url));
-	#portalurl = path + '/' + portalurl
-	#portalurl = portalurl
+	portalurl = addon_dir + '/' + portalurl
 	
 	setMac(portal_mac);
 	setSerialNumber(serial);
 	
+	if not os.path.exists(addon_dir):
+		os.makedirs(addon_dir)
+
+	if os.path.exists(portalurl):
+		#check last time
+		with open(portalurl) as data_file: data = json.load(data_file);
 	
+		if 'version' not in data or data['version'] != cache_version:
+			clearCache(url, addon_dir);
+			
+		else:
+			time_init = float(data['time']);
+			# update 12h
+			if ((now - time_init) / 3600) < 12:
+				return data;
 	
 	handshake(url);
 	
-	genres = getGenres(portal_mac, url, serial, path);
+	genres = getGenres(portal_mac, url, serial, addon_dir);
 	genres = genres["genres"];
 	
 	info = retrieveData(url, values = {
@@ -355,19 +393,38 @@ def getAllChannels(portal_mac, url, serial, path):
 	
 	return json.loads(data.encode('utf-8'));
 
-def getEPG(portal_mac, url, serial, path):	
+def getEPG(portal_mac, url, serial, addon_dir):	
 	global key, cache_version;
 	
 	now = time();
 	portalurl = "_".join(re.findall("[a-zA-Z0-9]+", url));
-	portalurl = path + '/' + portalurl + '-epg';
+	portalurl = addon_dir + '/' + portalurl + '-epg';
 	
 	setMac(portal_mac);
 	setSerialNumber(serial);
 	
+	if not os.path.exists(addon_dir): 
+		os.makedirs(addon_dir);
+	
+	if os.path.exists(portalurl):
+		#check last time
+		xmldoc = minidom.parse(portalurl);
+		
+		itemlist = xmldoc.getElementsByTagName('tv');
+		
+		version = itemlist[0].attributes['cache-version'].value;
+		
+		if version != cache_version:
+			clearCache(url, path);
+			
+		else:
+			time_init = float(itemlist[0].attributes['cache-time'].value);
+			# update 2h
+			if ((now - time_init) / 3600) < 2:
+				return xmldoc.toxml(encoding='utf-8');
 	
 
-	channels = getAllChannels(portal_mac, url, serial, path);
+	channels = getAllChannels(portal_mac, url, serial, addon_dir);
 	channels = channels['channels'];
 	
 	handshake(url);
@@ -457,7 +514,7 @@ def getEPG(portal_mac, url, serial, path):
 				pg_entry.appendChild(i_entry);
 
 	
-	with open(portalurl, 'w') as f: f.write(doc.toxml(encoding='utf-8'));
+	with open(portalurl, 'r+') as f: f.write(doc.toxml(encoding='utf-8'));
 	
 	return doc.toxml(encoding='utf-8');
 	

@@ -18,6 +18,9 @@ addon       = xbmcaddon.Addon()
 addonname   = addon.getAddonInfo('name')
 addondir    = xbmc.translatePath( addon.getAddonInfo('profile') ) 
 
+my_addon = xbmcaddon.Addon('plugin.video.stalker.net')
+addon_dir = xbmc.translatePath( my_addon.getAddonInfo('path') )
+
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
@@ -67,7 +70,7 @@ def homeLevel():
 def genreLevel():
 	
 	try:
-		data = load_channels.getGenres(portal['mac'], portal['url'], portal['serial'], addondir);
+		data = load_channels.getGenres(portal['mac'], portal['url'], portal['serial'], addon_dir);
 		
 	except Exception as e:
 		xbmcgui.Dialog().notification(addonname, str(e), xbmcgui.NOTIFICATION_ERROR );
@@ -110,7 +113,7 @@ def genreLevel():
 def vodLevel():
 	
 	try:
-		data = load_channels.getVoD(portal['mac'], portal['url'], portal['serial'], addondir);
+		data = load_channels.getVoD(portal['mac'], portal['url'], portal['serial'], addon_dir);
 		
 	except Exception as e:
 		xbmcgui.Dialog().notification(addonname, str(e), xbmcgui.NOTIFICATION_ERROR );
@@ -156,7 +159,7 @@ def channelLevel():
 	stop=False;
 		
 	try:
-		data = load_channels.getAllChannels(portal['mac'], portal['url'], portal['serial'], addondir);
+		data = load_channels.getAllChannels(portal['mac'], portal['url'], portal['serial'], addon_dir);
 		
 	except Exception as e:
 		xbmcgui.Dialog().notification(addonname, str(e), xbmcgui.NOTIFICATION_ERROR );
