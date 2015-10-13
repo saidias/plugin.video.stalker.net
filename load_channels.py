@@ -152,7 +152,7 @@ def getGenres(portal_mac, url, serial, path):
 	now = time();
 	portalurl = "_".join(re.findall("[a-zA-Z0-9]+", url));
 	#portalurl = path + '/' + portalurl + '-genres';
-	portalurl = portalurl + '-genres';
+	portalurl = 'tv-genres';
 	
 	setMac(portal_mac);
 	setSerialNumber(serial);
@@ -189,7 +189,7 @@ def getVoD(portal_mac, url, serial, path):
 	now = time();
 	portalurl = "_".join(re.findall("[a-zA-Z0-9]+", url));
 	#portalurl = path + '/' + portalurl + '-vod';
-	portalurl = portalurl + '-vod';
+	portalurl = 'tv-vod';
 	
 	setMac(portal_mac);
 	setSerialNumber(serial);
@@ -262,7 +262,7 @@ def getAllChannels(portal_mac, url, serial, path):
 	
 	portalurl = "_".join(re.findall("[a-zA-Z0-9]+", url));
 	#portalurl = path + '/' + portalurl
-	portalurl = portalurl
+	portalurl = 'tv-channels'
 	
 	setMac(portal_mac);
 	setSerialNumber(serial);
