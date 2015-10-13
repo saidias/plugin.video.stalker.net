@@ -181,7 +181,7 @@ def getGenres(portal_mac, url, serial, path):
 	
 	data = data[:-3] + '\n}}'
 
-	with open(portalurl, 'w') as f: f.write(data.encode('utf-8'));
+	with open(portalurl, 'r') as f: f.write(data.encode('utf-8'));
 	
 	return json.loads(data.encode('utf-8'));
 	
@@ -235,7 +235,7 @@ def getVoD(portal_mac, url, serial, path):
 
 	data = data[:-3] + '\n]}'
 
-	with open(portalurl, 'w') as f: f.write(data.encode('utf-8'));
+	with open(portalurl, 'r') as f: f.write(data.encode('utf-8'));
 	
 	return json.loads(data.encode('utf-8'));
 
@@ -350,7 +350,7 @@ def getAllChannels(portal_mac, url, serial, path):
 		data = data[:-3] + '\n}}';
 
 	
-	with open(portalurl, 'w') as f: f.write(data.encode('utf-8'));
+	with open(portalurl, 'r') as f: f.write(data.encode('utf-8'));
 	
 	return json.loads(data.encode('utf-8'));
 
@@ -364,25 +364,6 @@ def getEPG(portal_mac, url, serial, path):
 	setMac(portal_mac);
 	setSerialNumber(serial);
 	
-	if not os.path.exists(path): 
-		os.makedirs(path);
-	
-	if os.path.exists(portalurl):
-		#check last time
-		xmldoc = minidom.parse(portalurl);
-		
-		itemlist = xmldoc.getElementsByTagName('tv');
-		
-		version = itemlist[0].attributes['cache-version'].value;
-		
-		if version != cache_version:
-			clearCache(url, path);
-			
-		else:
-			time_init = float(itemlist[0].attributes['cache-time'].value);
-			# update 2h
-			if ((now - time_init) / 3600) < 2:
-				return xmldoc.toxml(encoding='utf-8');
 	
 
 	channels = getAllChannels(portal_mac, url, serial, path);
