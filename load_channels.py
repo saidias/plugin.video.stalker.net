@@ -157,21 +157,7 @@ def getGenres(portal_mac, url, serial, path):
 	setMac(portal_mac);
 	setSerialNumber(serial);
 	
-	if not os.path.exists(path): 
-		os.makedirs(path);
 	
-	if os.path.exists(portalurl):
-		#check last time
-		with open(portalurl) as data_file: data = json.load(data_file);
-		
-		if 'version' not in data or data['version'] != cache_version:
-			clearCache(url, path);
-			
-		else:
-			time_init = float(data['time']);
-			# update 12h
-			if ((now - time_init) / 3600) < 12:
-				return data;
 	
 	handshake(url);
 	
@@ -208,21 +194,7 @@ def getVoD(portal_mac, url, serial, path):
 	setMac(portal_mac);
 	setSerialNumber(serial);
 	
-	if not os.path.exists(path):
-		os.makedirs(path)
 	
-	if os.path.exists(portalurl):
-		#check last time
-		with open(portalurl) as data_file: data = json.load(data_file);
-	
-		if 'version' not in data or data['version'] != cache_version:
-			clearCache(url, path);
-			
-		else:
-			time_init = float(data['time']);
-			# update 12h
-			if ((now - time_init) / 3600) < 12:
-				return data;
 	
 	handshake(url);
 	
@@ -295,21 +267,7 @@ def getAllChannels(portal_mac, url, serial, path):
 	setMac(portal_mac);
 	setSerialNumber(serial);
 	
-	if not os.path.exists(path):
-		os.makedirs(path)
-
-	if os.path.exists(portalurl):
-		#check last time
-		with open(portalurl) as data_file: data = json.load(data_file);
 	
-		if 'version' not in data or data['version'] != cache_version:
-			clearCache(url, path);
-			
-		else:
-			time_init = float(data['time']);
-			# update 12h
-			if ((now - time_init) / 3600) < 12:
-				return data;
 	
 	handshake(url);
 	
